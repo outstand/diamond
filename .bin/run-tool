@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -euo pipefail
+
+options=("--rm" "-w" "$(pwd)")
+
+command="$(basename "$0")"
+case "$command" in
+  "language_server.sh")
+    options+=("-T")
+    command=/opt/elixir-ls/language_server.sh
+    ;;
+esac
+
+exec /opt/dev-env/bin/dev run "${options[@]}" tools "${command}" "$@"

@@ -1,0 +1,46 @@
+services:
+  phx:
+    build:
+      context: .
+    image: diamond:dev
+    ports:
+      - "4000"
+    stdin_open: true
+    tty: true
+    working_dir: ${WORKSPACE_DIR}
+    environment:
+      VIRTUAL_HOST: diamond.test,www.diamond.test
+      VIRTUAL_PORT: 4000
+      FIXUID:
+      FIXGID:
+      WORKSPACE_DIR:
+    volumes:
+      - config:/home/deploy/.config
+      - hex:/home/deploy/.hex
+      - mix:/home/deploy/.mix
+      - cache:/home/deploy/.cache
+      - .:${WORKSPACE_DIR}
+      # This is specific to Outstand's dev tooling.
+      - ~/.config/dev/cacerts:/usr/local/share/ca-certificates
+
+  tools:
+    image: diamond:dev
+    entrypoint: /tools-entrypoint.sh
+    command: exit
+    working_dir: ${WORKSPACE_DIR}
+    environment:
+      FIXUID:
+      FIXGID:
+      WORKSPACE_DIR:
+    volumes:
+      - config:/home/deploy/.config
+      - hex:/home/deploy/.hex
+      - mix:/home/deploy/.mix
+      - cache:/home/deploy/.cache
+      - .:${WORKSPACE_DIR}
+
+volumes:
+  config:
+  hex:
+  mix:
+  cache:
